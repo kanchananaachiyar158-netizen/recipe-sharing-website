@@ -1,78 +1,73 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Sharing Website</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #fff8f0;
-            margin: 0;
-            color: #333;
-        }
-        header {
-            background: #e76f51;
-            color: white;
-            text-align: center;
-            padding: 25px;
-        }
-        nav {
-            background: #264653;
-            padding: 15px;
-            text-align: center;
-        }
-        nav a {
-            color: white;
-            margin: 15px;
-            text-decoration: none;
-        }
-        .container {
-            padding: 20px;
-            text-align: center;
-        }
-        .recipe {
-            background: white;
-            padding: 20px;
-            margin: 15px auto;
-            max-width: 400px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px #ddd;
-        }
-        button {
-            background: #e76f51;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-        }
-        footer {
-            background: #264653;
-            color: white;
-            text-align: center;
-            padding: 15px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Recipe Book</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#fff8ed;color:#352719}
+header{background:#e86b35;color:white;text-align:center;padding:25px 12px}
+main{max-width:650px;margin:20px auto;padding:16px}
+.card{background:white;padding:20px;border-radius:14px;margin-bottom:18px;box-shadow:0 2px 10px #ddd}
+input,textarea{box-sizing:border-box;width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px;font:inherit}
+button{background:#e86b35;color:white;border:0;padding:12px 18px;border-radius:8px;font-size:16px;cursor:pointer}
+.recipe{border-bottom:1px solid #eee;padding:12px 0}
+h2{color:#b94b20}
+</style>
 </head>
 <body>
-    <header>
-        <h1>🍲 My Recipe Book</h1>
-        <p>Discover, Cook and Share Delicious Recipes!</p>
-    </header>
-
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#recipes">Recipes</a>
-        <a href="#about">About</a>
-    </nav>
-
-    <div class="container" id="home">
-        <h2>Welcome to My Recipe Book!</h2>
-        <p>Find your favourite recipes and enjoy cooking.</p>
-    </div>
-
-    <div class="container" id="recipes">
-        <h2>Popular Recipes</h2>
-
-        <div class="recipe">
-            <h
+<header>
+<h1>🍲 My Recipe Book</h1>
+<p>Discover, Cook and Share Delicious Recipes!</p>
+</header>
+<main>
+<section class="card">
+<h2>✍️ Share Your Recipe</h2>
+<form id="recipeForm">
+<input id="name" placeholder="Recipe name" required>
+<input id="ingredients" placeholder="Ingredients" required>
+<textarea id="steps" placeholder="Cooking steps" rows="4" required></textarea>
+<button type="submit">➕ Add Recipe</button>
+</form>
+</section>
+<section class="card">
+<h2>📖 My Recipes</h2>
+<div id="recipes"></div>
+</section>
+</main>
+<script>
+const form=document.getElementById('recipeForm');
+const list=document.getElementById('recipes');
+let recipes=JSON.parse(localStorage.getItem('myRecipes')||'[]');
+function showRecipes(){
+list.innerHTML='';
+recipes.forEach(r=>{
+const item=document.createElement('div');
+item.className='recipe';
+const title=document.createElement('h3');
+title.textContent='🍽️ '+r.name;
+const ingredients=document.createElement('p');
+ingredients.textContent='Ingredients: '+r.ingredients;
+const steps=document.createElement('p');
+steps.textContent='Steps: '+r.steps;
+item.append(title,ingredients,steps);
+list.appendChild(item);
+});
+if(!recipes.length)list.textContent='No recipes yet. Add your first recipe!';
+}
+form.addEventListener('submit',function(e){
+e.preventDefault();
+recipes.unshift({
+name:document.getElementById('name').value.trim(),
+ingredients:document.getElementById('ingredients').value.trim(),
+steps:document.getElementById('steps').value.trim()
+});
+localStorage.setItem('myRecipes',JSON.stringify(recipes));
+form.reset();
+showRecipes();
+});
+showRecipes();
+</script>
+</body>
+</html>
